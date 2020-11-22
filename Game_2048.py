@@ -80,6 +80,8 @@ class Game(object):
                     if flag:
                         new_row.append(2 * row[i])
                         self.score += 2 * row[i]
+                        if self.score > self.highscore:
+                            self.highscore = self.score
                         # 更新分数
                         flag = False
                     else:
@@ -171,14 +173,14 @@ class Game(object):
 
         def draw_column(column):
             # 绘制列
+
             cast(''.join('|         ' for num in column) + '|')
             cast(''.join('| {: ^7} '.format(num) if num > 0 else '|         ' for num in column) + '|')
             cast(''.join('|         ' for num in column) + '|')
 
         show.clear()
-        cast('分 数: ' + str(self.score))
-        if self.highscore != 0:
-            cast('最 高 分:' + str(self.highscore))
+        cast('分 数 : ' + str(self.score))
+        cast('最 高 分 :' + str(self.highscore))
         for column in self.board:
             # 绘制行、列、边框
             draw_row()
