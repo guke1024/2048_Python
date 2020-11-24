@@ -12,8 +12,10 @@ press_dict = {'W': 'Up', 'A': 'Left', 'S': 'Down', 'D': 'Right', 'R': 'Restart',
               'w': 'Up', 'a': 'Left', 's': 'Down', 'd': 'Right', 'r': 'Restart', 'q': 'Quit', 'n': 'Withdraw'}
 # 用户输入：程序操作
 old_board = []
-w_num = 0
-
+old_score = []
+n_num = 0
+old_high = 0
+round_num = 0
 
 class Game(object):
     def __init__(self, height=4, width=4, win=2048):
@@ -95,21 +97,35 @@ class Game(object):
 
         moves = {}
         global old_board
-        global w_num
-        if w_num == 0:
+        global old_score
+        global n_num
+        global old_high
+        global round_num
+        if n_num == 0:
             old_board.append(self.board)
+            old_score.append(self.score)
         if key_press == 'Withdraw':
             if len(old_board) == 1:
                 easygui.msgbox("开局不允许悔棋！")
             else:
-                if w_num == 0:
+                if n_num == 0:
                     self.board = old_board[-2]
-                    w_num = 1
+                    self.score = old_score[-2]
+                    if round_num == 1:
+                        self.highscore = self.score
+                    else:
+                        if old_high >= old_score[-1]:
+                            self.highscore = old_high
+                        else:
+                            self.highscore = self.score
+                    n_num = 1
                     return True
                 else:
                     easygui.msgbox("只能悔棋一次！")
         else:
-            w_num = 0
+            n_num = 0
+            old_board.append(self.board)
+            old_score.append(self.score)
         moves['Left'] = lambda board: [move_left(row) for row in board]
         moves['Right'] = lambda board: self.invert(moves['Left'](self.invert(board)))
         moves['Up'] = lambda board: self.transpose(moves['Left'](self.transpose(board)))
@@ -198,6 +214,9 @@ class Game(object):
 
 def main_program(stdscr):
     def start():
+        global round_num
+        round_num += 1
+        old_high = game_limit.highscore
         # 重置游戏
         game_limit.reset()
         return 'allGame'
