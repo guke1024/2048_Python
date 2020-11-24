@@ -215,6 +215,7 @@ class Game(object):
 def main_program(stdscr):
     def start():
         global round_num
+        global old_high
         round_num += 1
         old_high = game_limit.highscore
         # 重置游戏
