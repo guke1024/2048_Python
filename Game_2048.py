@@ -155,7 +155,7 @@ class Game(object):
 
     def draw(self, show):
         prompt_str1 = '(W)上 移 (S)下 移 (A)左 移 (D)右 移'
-        prompt_str2 = ' (N)悔 棋  (R)重 新 开 始  (Q)退 出'
+        prompt_str2 = '(N)悔 棋  (R)重 新 开 始  (Q)退 出'
         gameover_str = '           游 戏 结 束'
         win_string = '          你 赢 了 ！'
 
@@ -180,7 +180,7 @@ class Game(object):
 
         show.clear()
         cast('分 数 : ' + str(self.score))
-        cast('最 高 分 :' + str(self.highscore))
+        cast('最 高 分 : ' + str(self.highscore))
         for column in self.board:
             # 绘制行、列、边框
             draw_row()
