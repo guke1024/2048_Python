@@ -95,7 +95,6 @@ class Game(object):
                 return new_row
             return left_zero(same_cube(left_zero(row)))
 
-        moves = {}
         global old_board
         global old_score
         global n_num
@@ -126,6 +125,8 @@ class Game(object):
             n_num = 0
             old_board.append(self.board)
             old_score.append(self.score)
+
+        moves = {}
         moves['Left'] = lambda board: [move_left(row) for row in board]
         moves['Right'] = lambda board: self.invert(moves['Left'](self.invert(board)))
         moves['Up'] = lambda board: self.transpose(moves['Left'](self.transpose(board)))
