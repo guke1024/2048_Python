@@ -217,45 +217,45 @@ def main_program(stdscr):
         global round_num
         global old_high
         round_num += 1
-        old_high = game_limit.highscore
+        old_high = game_start.highscore
         # 重置游戏
-        game_limit.reset()
-        return 'allGame'
+        game_start.reset()
+        return 'start_Game'
 
     def rq_game(state):
-        game_limit.draw(stdscr)
+        game_start.draw(stdscr)
         # 画出游戏界面
-        action = game_limit.get_user_press(stdscr)
+        action = game_start.get_user_press(stdscr)
         # 判断重启还是结束
         keep_now = defaultdict(lambda: state)
-        keep_now['Restart'], keep_now['Quit'] = 'Limit', 'Quit'
+        keep_now['Restart'], keep_now['Quit'] = 'Restart', 'Quit'
         return keep_now[action]
 
     def end_game():
-        game_limit.draw(stdscr)
-        action = game_limit.get_user_press(stdscr)
+        game_start.draw(stdscr)
+        action = game_start.get_user_press(stdscr)
         if action == 'Restart':
-            return 'Limit'
+            return 'Restart'
         if action == 'Quit':
             return 'Quit'
-        if game_limit.move(action):
-            if game_limit.is_win():
+        if game_start.move(action):
+            if game_start.is_win():
                 return 'Win'
-            if game_limit.is_gameover():
+            if game_start.is_gameover():
                 return 'Gameover'
-        return 'allGame'
+        return 'start_Game'
 
     state_actions = {
-        'Limit': start,
+        'Restart': start,
         'Win': lambda: rq_game('Win'),
         'Gameover': lambda: rq_game('Gameover'),
-        'allGame': end_game
+        'start_Game': end_game
         }
 
     curses.use_default_colors()
 
-    game_limit = Game(win = 2048)
-    state = 'Limit'
+    game_start = Game(win = 2048)
+    state = 'Restart'
     while state != 'Quit':
         state = state_actions[state]()
 
