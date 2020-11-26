@@ -262,7 +262,7 @@ def main_program(stdscr):
 
     curses.use_default_colors()
 
-    game_start = Game(win = 64)
+    game_start = Game(win = 2048)
     state = 'Restart'
     while state != 'Quit':
         state = state_actions[state]()
