@@ -16,6 +16,7 @@ old_score = []
 n_num = 0
 old_high = 0
 round_num = 0
+win_num = 0
 
 class Game(object):
     def __init__(self, height=4, width=4, win=2048):
@@ -203,8 +204,14 @@ class Game(object):
             draw_row()
             draw_column(column)
         draw_row()
+
+        global win_num
         if self.is_win():
-            cast(win_string)
+            if win_num == 0:
+                cast(win_string)
+                win_num += 1
+            else:
+                cast(prompt_str1)
         else:
             if self.is_gameover():
                 cast(gameover_str)
@@ -217,8 +224,10 @@ def main_program(stdscr):
     def start():
         global round_num
         global old_high
+        global win_num
         round_num += 1
         old_high = game_start.highscore
+        win_num = 0
         # 重置游戏
         game_start.reset()
         return 'start_Game'
@@ -229,7 +238,7 @@ def main_program(stdscr):
         action = game_start.get_user_press(stdscr)
         # 判断重启还是结束
         keep_now = defaultdict(lambda: state)
-        keep_now['Restart'], keep_now['Quit'] = 'Restart', 'Quit'
+        keep_now['Restart'], keep_now['Quit'], keep_now['Withdraw'] = 'Restart', 'Quit', 'Withdraw'
         return keep_now[action]
 
     def end_game():
@@ -240,22 +249,20 @@ def main_program(stdscr):
         if action == 'Quit':
             return 'Quit'
         if game_start.move(action):
-            if game_start.is_win():
-                return 'Win'
             if game_start.is_gameover():
                 return 'Gameover'
         return 'start_Game'
 
     state_actions = {
+        'Withdraw': end_game,
         'Restart': start,
-        'Win': lambda: rq_game('Win'),
         'Gameover': lambda: rq_game('Gameover'),
         'start_Game': end_game
         }
 
     curses.use_default_colors()
 
-    game_start = Game(win = 2048)
+    game_start = Game(win = 64)
     state = 'Restart'
     while state != 'Quit':
         state = state_actions[state]()
